@@ -7,12 +7,13 @@ library("zoo")
 library("Matching")
 library("tableone")
 library("pROC")
+library("skimr")
 
 
 
 
 # read rhc dataset ------------------------------------------------------------
-# YOU NEED TO POINT R TO THE "rhc.RDS" FILE ON YOUR MACHINE
+# YOU NEED TO POINT R TO THE "rhcDataset.RDS" FILE ON YOUR MACHINE
 rhc <- readRDS("rhcDataset.RDS")
 rhc
 # View(rhc)
@@ -80,7 +81,7 @@ matchVarsDf <- rhc %>%
   mutate_if(is.character, funs(as.numeric(as.factor(.))))
   
 # why exact matching is problematci
-set.seed(12345)
+# set.seed(12345)
 exactMatch <- Match(
   Y = rhc$dth30
   , Tr = rhc$swang1
@@ -218,7 +219,7 @@ exp(cbind(OddsRatios = coef(glmM2), confint(glmM2)))
 
 # greedy matching on Mahanalobis ----------------------------------------------
 # add-in some more covariates
-rhc <- readRDS("rhc.RDS")
+rhc <- readRDS("rhcDataset.RDS")
 matchVars <- c("age", "sex", "cat1", "meanbp1"
                , "surv2md1", "hrt1", "resp1", "renalhx", "liverhx")
 

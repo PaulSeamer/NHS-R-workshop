@@ -1,9 +1,9 @@
 
 
 # required packages
+library("tidyverse")
 library("season")  # monthglm()
 library("zoo")  # as.yearmon()
-library("tidyverse")
 # also requires "Epi", "lmtest" and "tsModel" - these just need to be installed not loaded
 
 
@@ -12,7 +12,7 @@ library("tidyverse")
 # read Sicily dataset ---------------------------------------------------------
 # read Sicily dataset from csv file
 # YOU NEED TO POINT R TO THE "sicilyDataset.csv" FILE ON YOUR MACHINE
-sicily <- read_csv("C:/.../sicilyDataset.csv")
+sicily <- read_csv("sicilyDataset.csv")
 sicily
 # View(sicily)
 
@@ -26,7 +26,7 @@ sicily
 
 
 
-# explore the Sicily dataste --------------------------------------------------
+# explore the Sicily dataset --------------------------------------------------
 # create date variable - year-month format using zoo::as.yearmon()
 sicily <- sicily %>%
   mutate(dt = as.yearmon(paste(sicily$year, sicily$month, sep = "-")))
@@ -53,7 +53,7 @@ ggplot(data = sicily) +
 
 
 
-# investiagte seasonality -----------------------------------------------------
+# investigate seasonality -----------------------------------------------------
 # plot admissions series by month prior to intervention -
 # you need to set the admission series as a time series variables using ts()
 monthplot(ts(sicily %>% filter(smokban == 0) %>% pull(aces), frequency = 12))
@@ -100,7 +100,7 @@ ggplot(sicilyMoyPlotData) +
 
 
 
-# level change impact model ----------------------------------------------------
+# level change impact model ---------------------------------------------------
 # use segemented regression to test for a level change in admissions associated with the smoking ban
 
 # fit a simple linear trend model to the pre intervention period
@@ -188,6 +188,7 @@ ggplot(data = sicilyLevelChg) +
 
 
 
+
 # model checks ----------------------------------------------------------------
 # check level change model residuals by plotting against time
 res <- residuals(modelLevelChg, type = "deviance")
@@ -204,6 +205,7 @@ lmtest::dwtest(modelLevelChg)  # Durbin-Watson test suggests presence of autocor
 
 # more diagnostic plots
 plot(modelLevelChg)
+
 
 
 
